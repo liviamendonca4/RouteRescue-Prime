@@ -1,0 +1,736 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RouteRescue Prime</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #071426;
+    color: white;
+}
+
+header {
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0c1d33;
+    border-bottom: 1px solid #203650;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    color: #54d6ff;
+}
+
+button {
+    background: #39c6f4;
+    color: #071426;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #8ce5ff;
+}
+
+.secondary {
+    background: transparent;
+    color: white;
+    border: 1px solid #39c6f4;
+}
+
+.container {
+    width: 86%;
+    max-width: 1100px;
+    margin: 35px auto;
+}
+
+.card {
+    background: #10243d;
+    padding: 25px;
+    border-radius: 14px;
+    margin-bottom: 22px;
+    border: 1px solid #203b58;
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+h2 {
+    color: #54d6ff;
+}
+
+p {
+    line-height: 1.6;
+    color: #c5d5e7;
+}
+
+input, select {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0 16px;
+    border-radius: 7px;
+    border: 1px solid #38516c;
+    background: #071426;
+    color: white;
+}
+
+label {
+    color: #dbe8f5;
+}
+
+.form-box {
+    max-width: 430px;
+    margin: 55px auto;
+}
+
+.form-box h1 {
+    font-size: 30px;
+    text-align: center;
+}
+
+.form-box p {
+    text-align: center;
+}
+
+.form-box button {
+    width: 100%;
+}
+
+.switch {
+    color: #54d6ff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.result {
+    background: #0a1a2d;
+    border-left: 4px solid #39c6f4;
+    padding: 18px;
+    margin-top: 15px;
+    border-radius: 8px;
+}
+
+.small {
+    font-size: 13px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #8fa6bf;
+}
+
+/* Booking popup */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 470px;
+    background: #10243d;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #39c6f4;
+    margin: auto;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.close-btn {
+    float: right;
+    padding: 6px 12px;
+    background: #233c58;
+    color: white;
+}
+
+.full-btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.success {
+    color: #7cf0b0;
+}
+
+@media(max-width: 600px) {
+    h1 {
+        font-size: 32px;
+    }
+
+    header {
+        padding: 16px 5%;
+    }
+
+    .container {
+        width: 92%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">✈ RouteRescue Prime</div>
+    <button id="logoutBtn" class="secondary hidden"
+        onclick="logout()">Log Out</button>
+</header>
+
+<!-- SIGN IN PAGE -->
+<section id="loginPage" class="container">
+    <div class="card form-box">
+        <h1>Welcome Back!</h1>
+        <p>Sign in to continue your journey.</p>
+
+        <form onsubmit="signIn(event)">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail"
+                placeholder="Enter your email" required>
+
+            <label>Password</label>
+            <input type="password" id="loginPassword"
+                placeholder="Enter your password" required>
+
+            <button type="submit">Sign In</button>
+        </form>
+
+        <p>Don't have an account?
+            <span class="switch" onclick="showSignUp()">Sign Up</span>
+        </p>
+
+        <p class="small">Create an account using Sign Up first.</p>
+        <p id="loginMessage"></p>
+    </div>
+</section>
+
+<!-- SIGN UP PAGE -->
+<section id="signupPage" class="container hidden">
+    <div class="card form-box">
+        <h1>Create Account</h1>
+        <p>Join RouteRescue Prime today.</p>
+
+        <form onsubmit="signUp(event)">
+            <label>Full Name</label>
+            <input type="text" id="signupName"
+                placeholder="Enter your name" required>
+
+            <label>Email Address</label>
+            <input type="email" id="signupEmail"
+                placeholder="Enter your email" required>
+
+            <label>Password</label>
+            <input type="password" id="signupPassword"
+                placeholder="Create a password" minlength="6" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <p>Already have an account?
+            <span class="switch" onclick="showLogin()">Sign In</span>
+        </p>
+
+        <p id="signupMessage"></p>
+    </div>
+</section>
+
+<!-- MAIN WEBSITE -->
+<main id="dashboard" class="hidden">
+    <section class="container">
+
+        <div class="card">
+            <p>TRAVEL RECOVERY, REIMAGINED</p>
+            <h1 id="welcomeHeading">
+                Your plan B.<br>Your meeting still matters.
+            </h1>
+            <p>
+                Flight delayed? Train cancelled? RouteRescue Prime
+                helps you explore alternative travel options and hotel
+                assistance based on your budget.
+            </p>
+        </div>
+
+        <!-- TRAVEL OPTIONS -->
+        <div class="card">
+            <h2>Find Your Recovery Route</h2>
+
+            <label>Starting Location</label>
+            <input id="origin" type="text"
+                placeholder="e.g. Mangaluru">
+
+            <label>Destination</label>
+            <input id="destination" type="text"
+                placeholder="e.g. Bengaluru">
+
+            <label>Travel Disruption</label>
+            <select id="disruption">
+                <option>Flight Delayed</option>
+                <option>Flight Cancelled</option>
+                <option>Train Cancelled</option>
+                <option>Bus Delayed</option>
+            </select>
+
+            <label>Maximum Travel Budget (₹)</label>
+            <input id="budget" type="number" min="1"
+                placeholder="e.g. 5000">
+
+            <label>Priority</label>
+            <select id="priority">
+                <option>Reach as soon as possible</option>
+                <option>Lowest cost</option>
+                <option>Comfortable journey</option>
+            </select>
+
+            <button onclick="findRoutes()">Find Alternatives</button>
+
+            <div id="routeResults"></div>
+        </div>
+
+        <!-- HOTEL ASSISTANCE -->
+        <div class="card">
+            <h2>🏨 Hotel Assistance</h2>
+            <p>
+                If your flight is delayed for several hours or overnight,
+                find hotel options according to your budget.
+            </p>
+
+            <label>City where you need a hotel</label>
+            <input id="hotelCity" type="text"
+                placeholder="e.g. Bengaluru">
+
+            <label>Maximum Hotel Budget per Night (₹)</label>
+            <input id="hotelBudget" type="number" min="1"
+                placeholder="e.g. 2000">
+
+            <button onclick="findHotels()">Find Hotels</button>
+            <div id="hotelResults"></div>
+
+            <p class="small">
+                Hotel searches open external search results. Confirm
+                prices and availability with the booking provider.
+            </p>
+        </div>
+
+        <!-- RECOVERY CHECKLIST -->
+        <div class="card">
+            <h2>Recovery Checklist</h2>
+            <p>Use this checklist when your journey is disrupted.</p>
+
+            <label>
+                <input type="checkbox" style="width:auto">
+                Check the latest travel update
+            </label>
+            <br><br>
+
+            <label>
+                <input type="checkbox" style="width:auto">
+                Contact the airline or transport provider
+            </label>
+            <br><br>
+
+            <label>
+                <input type="checkbox" style="width:auto">
+                Compare alternative travel options
+            </label>
+            <br><br>
+
+            <label>
+                <input type="checkbox" style="width:auto">
+                Check hotel availability if staying overnight
+            </label>
+        </div>
+
+    </section>
+</main>
+
+<!-- BOOKING POPUP -->
+<div id="bookingModal" class="modal hidden">
+    <div class="modal-content">
+
+        <button class="close-btn"
+            onclick="closeBooking()">✕</button>
+
+        <div id="bookingFormArea">
+            <h2>Confirm Your Booking</h2>
+            <p>Review your selected travel option.</p>
+
+            <p><b>From:</b> <span id="bookingOrigin"></span></p>
+            <p><b>To:</b> <span id="bookingDestination"></span></p>
+            <p><b>Transport:</b> <span id="bookingTransport"></span></p>
+
+            <h2 id="bookingPrice"></h2>
+
+            <form onsubmit="confirmBooking(event)">
+                <label>Passenger Name</label>
+                <input type="text" id="passengerName"
+                    placeholder="Enter passenger name" required>
+
+                <label>Demo Payment Method</label>
+                <select id="paymentMethod" required>
+                    <option value="">Select payment method</option>
+                    <option>UPI (Demo)</option>
+                    <option>Debit Card (Demo)</option>
+                    <option>Credit Card (Demo)</option>
+                    <option>Net Banking (Demo)</option>
+                </select>
+
+                <p class="small">
+                    This is a demo payment. No real money will be charged.
+                    Do not enter actual card or bank details.
+                </p>
+
+                <button type="submit" class="full-btn">
+                    Confirm Demo Booking
+                </button>
+            </form>
+        </div>
+
+        <!-- BOOKING SUCCESS -->
+        <div id="bookingSuccess" class="hidden">
+            <h2 class="success">✓ Booking Confirmed!</h2>
+
+            <p>Your demo booking has been confirmed successfully.</p>
+
+            <div id="bookingSummary" class="result"></div>
+
+            <p class="small">
+                Demo confirmation only. No actual ticket was purchased
+                and no payment was processed.
+            </p>
+
+            <button onclick="closeBooking()" class="full-btn">
+                Done
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    RouteRescue Prime | Travel recovery made easier
+</footer>
+
+<script>
+
+// SIGN IN AND SIGN UP
+
+function showLogin() {
+    document.getElementById("loginPage").classList.remove("hidden");
+    document.getElementById("signupPage").classList.add("hidden");
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("logoutBtn").classList.add("hidden");
+}
+
+function showSignUp() {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("signupPage").classList.remove("hidden");
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("logoutBtn").classList.add("hidden");
+}
+
+function signUp(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("signupName").value.trim();
+    const email = document.getElementById("signupEmail").value.trim().toLowerCase();
+    const password = document.getElementById("signupPassword").value;
+
+    let users = JSON.parse(localStorage.getItem("rrUsers") || "[]");
+
+    if (users.some(user => user.email === email)) {
+        document.getElementById("signupMessage").textContent =
+            "This email already has an account. Please sign in.";
+        return;
+    }
+
+    users.push({
+        name: name,
+        email: email,
+        password: password
+    });
+
+    localStorage.setItem("rrUsers", JSON.stringify(users));
+
+    alert("Account created! Please sign in.");
+
+    document.getElementById("loginEmail").value = email;
+    showLogin();
+}
+
+function signIn(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+
+    let users = JSON.parse(localStorage.getItem("rrUsers") || "[]");
+
+    const user = users.find(
+        user => user.email === email && user.password === password
+    );
+
+    if (user) {
+        localStorage.setItem("rrLoggedInUser", user.name);
+        showDashboard(user.name);
+    } else {
+        document.getElementById("loginMessage").textContent =
+            "Incorrect email or password. Please sign up first if you are new.";
+    }
+}
+
+function showDashboard(name) {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("signupPage").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    document.getElementById("logoutBtn").classList.remove("hidden");
+
+    document.getElementById("welcomeHeading").innerHTML =
+        "Welcome, " + escapeHTML(name) +
+        "!<br>Your plan B. Your meeting still matters.";
+}
+
+function logout() {
+    localStorage.removeItem("rrLoggedInUser");
+    showLogin();
+}
+
+// SAFELY DISPLAY USER TEXT
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, function(char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+// FIND TRAVEL ALTERNATIVES
+
+function findRoutes() {
+    const origin = document.getElementById("origin").value.trim();
+    const destination = document.getElementById("destination").value.trim();
+    const disruption = document.getElementById("disruption").value;
+    const budget = Number(document.getElementById("budget").value);
+    const priority = document.getElementById("priority").value;
+    const results = document.getElementById("routeResults");
+
+    if (!origin || !destination || budget <= 0) {
+        alert("Please enter your locations and a valid budget.");
+        return;
+    }
+
+    const routes = [
+        {
+            name: "Alternative Flight",
+            price: 3500,
+            time: "2–4 hours"
+        },
+        {
+            name: "Train",
+            price: 1200,
+            time: "6–10 hours"
+        },
+        {
+            name: "Bus",
+            price: 800,
+            time: "7–12 hours"
+        }
+    ];
+
+    let filtered = routes.filter(route => route.price <= budget);
+
+    if (priority === "Lowest cost") {
+        filtered.sort((a, b) => a.price - b.price);
+    } else if (priority === "Reach as soon as possible") {
+        filtered.sort((a, b) =>
+            parseInt(a.time) - parseInt(b.time)
+        );
+    }
+
+    let html = "<h2>Suggested Options</h2>";
+
+    html += "<p>" + escapeHTML(disruption) + " from " +
+        escapeHTML(origin) + " to " +
+        escapeHTML(destination) + ".</p>";
+
+    if (filtered.length === 0) {
+        html += "<p>No demo options fit this budget. Try increasing it.</p>";
+    } else {
+        filtered.forEach(route => {
+            html +=
+                '<div class="result">' +
+                '<h3>' + escapeHTML(route.name) + '</h3>' +
+                '<p>Estimated demo cost: ₹' + route.price +
+                '<br>Estimated journey: ' + escapeHTML(route.time) +
+                '</p>' +
+                '<p class="small">Illustrative option only. Not live availability.</p>' +
+                '<button onclick="bookTravel(\'' +
+                escapeHTML(route.name) + '\',' + route.price +
+                ')">Confirm Booking</button>' +
+                '</div>';
+        });
+    }
+
+    results.innerHTML = html;
+}
+
+// OPEN THE BOOKING POPUP FOR FLIGHT, TRAIN OR BUS
+
+function bookTravel(type, price) {
+    document.getElementById("bookingOrigin").textContent =
+        document.getElementById("origin").value.trim();
+
+    document.getElementById("bookingDestination").textContent =
+        document.getElementById("destination").value.trim();
+
+    document.getElementById("bookingTransport").textContent = type;
+
+    document.getElementById("bookingPrice").textContent =
+        "Demo Total: ₹" + price;
+
+    document.getElementById("bookingFormArea").classList.remove("hidden");
+    document.getElementById("bookingSuccess").classList.add("hidden");
+
+    document.getElementById("passengerName").value = "";
+    document.getElementById("paymentMethod").value = "";
+
+    document.getElementById("bookingModal").classList.remove("hidden");
+}
+
+// CONFIRM DEMO BOOKING
+
+function confirmBooking(event) {
+    event.preventDefault();
+
+    const passenger = document.getElementById("passengerName").value.trim();
+    const method = document.getElementById("paymentMethod").value;
+    const price = document.getElementById("bookingPrice").textContent;
+    const transport = document.getElementById("bookingTransport").textContent;
+    const origin = document.getElementById("bookingOrigin").textContent;
+    const destination = document.getElementById("bookingDestination").textContent;
+
+    if (!passenger || !method) {
+        alert("Please fill in all booking details.");
+        return;
+    }
+
+    const bookingId = "RRP" +
+        Math.floor(100000 + Math.random() * 900000);
+
+    document.getElementById("bookingSummary").innerHTML =
+        "<p><b>Booking ID:</b> " + bookingId + "</p>" +
+        "<p><b>Passenger:</b> " + escapeHTML(passenger) + "</p>" +
+        "<p><b>Transport:</b> " + escapeHTML(transport) + "</p>" +
+        "<p><b>From:</b> " + escapeHTML(origin) + "</p>" +
+        "<p><b>To:</b> " + escapeHTML(destination) + "</p>" +
+        "<p><b>Payment method:</b> " + escapeHTML(method) + "</p>" +
+        "<p><b>" + escapeHTML(price) + "</b></p>";
+
+    document.getElementById("bookingFormArea").classList.add("hidden");
+    document.getElementById("bookingSuccess").classList.remove("hidden");
+}
+
+function closeBooking() {
+    document.getElementById("bookingModal").classList.add("hidden");
+}
+
+// HOTEL ASSISTANCE
+
+function findHotels() {
+    const city = document.getElementById("hotelCity").value.trim();
+    const budget = Number(document.getElementById("hotelBudget").value);
+    const results = document.getElementById("hotelResults");
+
+    if (!city || budget <= 0) {
+        alert("Please enter a city and a valid hotel budget.");
+        return;
+    }
+
+    const queries = [
+        {
+            title: "Budget Hotels",
+            text: "budget hotels under ₹" + budget + " per night"
+        },
+        {
+            title: "Hotels Near the Airport",
+            text: "hotels near airport under ₹" + budget + " per night"
+        },
+        {
+            title: "Hotels Near the City Centre",
+            text: "affordable hotels near city centre under ₹" + budget
+        }
+    ];
+
+    let html = "<h2>Hotel Search Options</h2>";
+
+    queries.forEach(item => {
+        const query = item.text + " in " + city;
+
+        html +=
+            '<div class="result">' +
+            '<h3>' + escapeHTML(item.title) + '</h3>' +
+            '<p>Search for options in ' + escapeHTML(city) +
+            ' within your budget of ₹' + budget + ' per night.</p>' +
+            '<button onclick="openHotelSearch(' +
+            JSON.stringify(encodeURIComponent(query)) +
+            ')">Search Hotels</button>' +
+            '</div>';
+    });
+
+    results.innerHTML = html;
+}
+
+function openHotelSearch(query) {
+    window.open(
+        "https://www.google.com/search?q=" + query,
+        "_blank"
+    );
+}
+
+// RESTORE LOGIN SESSION
+
+const savedUser = localStorage.getItem("rrLoggedInUser");
+
+if (savedUser) {
+    showDashboard(savedUser);
+}
+
+</script>
+
+</body>
+</html>
